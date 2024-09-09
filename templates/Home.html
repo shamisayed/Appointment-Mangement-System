@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor-Patient Appointment System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image:url({{url_for('static',filename='images/home_back.jpg')}});
+            background-size:auto;
+            background-repeat:no-repeat;
+        }
+        .container {
+            max-width: 800px;
+            margin: 60px 176px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+              margin-bottom: 31px;
+              text-align: center;
+              font-size: 54px;
+              margin-top:20px;
+        }
+
+        .button {
+             display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 32px;
+            border-radius: 5px;
+            font-size: 20px;
+            transition: background-color 0.3s;
+            margin: 24px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="col-12">Welcome to the Hospital Management System</h1>
+    <div class="container">
+        <a href="/add_appointment" class="button col-4">Schedule an Appointment</a>
+        <a href="/view" class="button col-4">View Appointments</a>
+        <a href="/add_doc" class="button col-4">Add Doctor</a>
+        <a href="/display_doctor" class="button col-4">View Doctor List</a>
+    </div>
+</body>
+</html>
