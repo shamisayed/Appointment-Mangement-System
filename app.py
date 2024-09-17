@@ -4,7 +4,7 @@ from datetime import datetime, date, time
 from sqlalchemy import Column, Integer, String, Date, Time
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:yash%40123@localhost/project'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost/project'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -71,10 +71,15 @@ def create_new_doc():
 def display_doctor():
     doc = Doctor.query.all()
     return render_template('display_docs.html', doc=doc)
-
+@app.route('/delete_appointment/<int:appointment_no>', methods=['POST'])
+def delete_appointment(appointment_no):
+    appointment = Schedule.query.get(appointment_no)
+    if appointment:
+        db.session.delete(appointment)
+        db.session.commit()
+    return redirect('/view')
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
