@@ -15,6 +15,9 @@ class Schedule(db.Model):
     patient_name = Column(String(100), nullable=False)
     appointment_date = Column(Date, default=date.today)
     appointment_time = Column(Time, default=datetime.now().time)
+    __table_args__ = (
+        UniqueConstraint('doctor', 'appointment_date', 'appointment_time', name='uq_schedule_doctor_appointment'),
+    )
 
 class Doctor(db.Model):
     __tablename__ = 'doctor'
@@ -39,13 +42,19 @@ def get_all_schedules():
 @app.route('/create_schedule', methods=['POST'])
 def create_new_schedule():
     data = request.form
-    new_schedule = Schedule(doctor=data['doc'],
-                            patient_name=data['patient_name'],
-                            appointment_date=datetime.strptime(data['appointment_date'], '%Y-%m-%d').date(),
-                            appointment_time=datetime.strptime(data['appointment_time'], '%H:%M').time())
-    db.session.add(new_schedule)
-    db.session.commit()
-
+    try:
+        new_schedule = Schedule(
+            doctor=data['doc'],
+            patient_name=data['patient_name'],
+            appointment_date=datetime.strptime(data['appointment_date'], '%Y-%m-%d').date(),
+            appointment_time=datetime.strptime(data['appointment_time'], '%H:%M').time()
+        )
+        db.session.add(new_schedule)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        # Handle uniqueness constraint violation here
+        return f"Error: {str(e)}", 400  # You can return a custom message
     return redirect("/view")
 
 # GET view specific schedule route
